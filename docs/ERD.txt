@@ -1,0 +1,38 @@
+Table dim_comic {
+  comic_id INTEGER [pk]
+  title TEXT [not null]
+  safe_title TEXT
+  date_id INTEGER [ref: > dim_date.date_id]
+  img TEXT
+  created_at DATETIME
+  updated_at DATETIME
+}
+
+Table dim_date {
+  date_id INTEGER [pk]
+  date TEXT [not null]
+  year INTEGER
+  month INTEGER
+  day INTEGER
+  weekday TEXT
+  week_number INTEGER
+}
+
+Table fact_comic_stats {
+  comic_id INTEGER [pk, ref: > dim_comic.comic_id]
+  cost_eur REAL
+  title_length INTEGER
+  views INTEGER
+  review_score REAL
+  created_at DATETIME
+}
+
+Table dim_comic_text_enrichment {
+  comic_id INTEGER [pk, ref: > dim_comic.comic_id]
+  alt TEXT
+  transcript TEXT
+  news TEXT
+  link TEXT
+  created_at DATETIME
+  updated_at DATETIME
+}
