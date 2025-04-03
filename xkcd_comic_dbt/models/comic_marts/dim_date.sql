@@ -7,7 +7,7 @@
 -- We also derive other attributes like weekday and week_number
 -- This table can be used across the entire DWH for date related analysis
 
-{{config(materialized='table')}} --to make the dimensions as table
+{{config(materialized='table')}}
 
 WITH dates_stg AS(
     SELECT DISTINCT

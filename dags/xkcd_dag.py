@@ -1,3 +1,7 @@
+"""
+The central script to run all the airflow tasks via a DAG
+"""
+
 import sys
 import os
 from airflow import DAG
@@ -5,6 +9,7 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 
+# adding custom dir to module search path
 sys.path.append("/opt/airflow")
 
 from scripts.main import run_xkcd_process
@@ -15,6 +20,7 @@ default_args = {
     'retry_delay': timedelta(minutes=3),
 }
 
+# Defines path of dbt project
 DBT_PROJECT_PATH = "/opt/airflow/xkcd_comic_dbt"
 PROFILE_DIR = os.path.join(DBT_PROJECT_PATH, "profiles")
 
@@ -24,7 +30,7 @@ with DAG(
                     'available from the XKCD API.',
         default_args=default_args,
         start_date=datetime(2024, 3, 1),
-        schedule_interval='*/15 * * * 1,3,5',  # Mon, Wed, Fri
+        schedule_interval='*/15 * * * 1,3,5',  # Mon, Wed, Fri at every 15 mins interval
         catchup=False
 ) as dag:
     # for inserting new comic
@@ -38,11 +44,11 @@ with DAG(
         bash_command=f'cd {DBT_PROJECT_PATH} && dbt run --profiles-dir {PROFILE_DIR}'
     )
 
-    # to test the data
+    # to test the data quality
     run_dbt_test = BashOperator(
         task_id='data_check_task',
         bash_command=f'cd {DBT_PROJECT_PATH} && dbt test --profiles-dir {PROFILE_DIR}'
     )
 
-    # execution order
+    # execution order of tasks
     run_data_load >> run_dbt_model >> run_dbt_test

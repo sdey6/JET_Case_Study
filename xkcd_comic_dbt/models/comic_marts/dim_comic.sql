@@ -13,7 +13,8 @@ WITH source_data AS
 final_output AS (
     SELECT
     comic_id,
-    title,
+    title_cleaned as title_cleaned,
+    title_letter_count ,
     safe_title,
     img,
    CAST(year AS INTEGER) * 10000 --eg:20250000(the last 0000 is for mmdd
@@ -22,6 +23,6 @@ final_output AS (
     CURRENT_TIMESTAMP AS created_at,
     CURRENT_TIMESTAMP AS modified_at
     FROM source_data
-    WHERE title IS NOT NULL
+    WHERE title_cleaned IS NOT NULL
 )
 SELECT * FROM final_output

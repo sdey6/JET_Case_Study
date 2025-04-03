@@ -18,8 +18,8 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - ./data:/opt/airflow/data                        # ✅ your data folder (SQLite)
-      - ./xkcd_comic_dbt:/opt/airflow/xkcd_comic_dbt    # ✅ your dbt project
+      - ./data:/opt/airflow/data
+      - ./xkcd_comic_dbt:/opt/airflow/xkcd_comic_dbt
 
     ports:
       - "8080:8080"
@@ -45,8 +45,8 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - ./data:/opt/airflow/data                        # ✅ your data folder (SQLite)
-      - ./xkcd_comic_dbt:/opt/airflow/xkcd_comic_dbt    # ✅ your dbt project
+      - ./data:/opt/airflow/data
+      - ./xkcd_comic_dbt:/opt/airflow/xkcd_comic_dbt
 
     command: ["airflow", "scheduler"]
     restart: always

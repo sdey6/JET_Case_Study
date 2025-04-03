@@ -10,6 +10,13 @@ models:
       - name: title
         description: "Title of each comic and not-null."
         tests: [not_null]
+      - name: title_cleaned
+        description: "Title after cleaning HTML tags."
+        tests: [ not_null ]
+      - name: title_letter_count
+        description: "Number of alphabetic characters in the cleaned title."
+        tests:
+          - not_null
       - name: year
         description: "Comic publication year."
         tests: [not_null]
@@ -58,9 +65,7 @@ models:
           - relationships:
               to: ref('dim_date')
               field: date_id
-      - name: title
-        description: "Title of each comic and ideally not null."
-        tests: [not_null]
+
 
   - name: dim_comic_text_enrichment
     description: "Stores enriching data for comics like transcript, alt text, news."
@@ -89,17 +94,10 @@ models:
               to: ref('dim_comic')
               field: comic_id
 
-      - name: title_length
-        description: "Number of characters in each comic title and needed to derive cost per comic."
-        tests:
-          - not_null
-          - dbt_utils.expression_is_true("title_length > 0")
-
       - name: cost_eur
         description: "Computed by title_length * 5(euros) and always be >0."
         tests:
           - not_null
-          - dbt_utils.expression_is_true("cost_eur > 0")
 
       - name: views
         description: "View count per comic generated as a random number between 0 and 10000."

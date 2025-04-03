@@ -25,7 +25,7 @@
 WITH source_data AS (
     SELECT
         comic_id,
-        title
+        title_letter_count
     FROM {{ ref('dim_comic') }}
     {% if is_incremental() %}
         WHERE comic_id NOT IN (SELECT comic_id FROM {{ this }})
@@ -42,10 +42,14 @@ final_output AS (
     SELECT
         max_id.current_max + ROW_NUMBER() OVER (ORDER BY comic_id) AS stats_id,
         comic_id,
-        LENGTH(title) AS title_length,
-        LENGTH(title) * 5 AS cost_eur,
-        CAST(ROUND((ABS(RANDOM()) / 9223372036854775807.0) * 10000, 0) AS INTEGER) AS views,
-        ROUND(1 + (ABS(RANDOM()) / 9223372036854775807.0) * 9, 1) AS review_score,
+        title_letter_count,
+       title_letter_count * 5 AS cost_eur,
+        CAST(ROUND((ABS(RANDOM()) / 9223372036854775807.0) * 10000, 0) AS INTEGER) AS views, --explanation above
+        ROUND(1 + (ABS(RANDOM()) / 9223372036854775807.0) * 9, 1) AS review_score, --explanation above
+         CASE
+          WHEN title_letter_count = 0 THEN 'review-title'
+          ELSE NULL
+        END AS title_flag,
         CURRENT_TIMESTAMP AS created_at
     FROM source_data, max_id
 )

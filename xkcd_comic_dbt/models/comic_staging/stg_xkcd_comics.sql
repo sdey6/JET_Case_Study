@@ -12,6 +12,8 @@ SELECT
     alt,
     img,
     title,
+    title_cleaned,
+    title_letter_count,
     day,
     created_at,
     updated_at

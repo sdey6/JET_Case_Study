@@ -1,0 +1,2 @@
+1. erd change update tables
+2. ask business about cost of trailing char removal

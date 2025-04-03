@@ -1,3 +1,5 @@
+# This is used in dbdiagram.io to generate the ERD, later used in draw.io to complete the ERD
+
 Table dim_comic {
   comic_id INTEGER [pk]
   title TEXT [not null]
